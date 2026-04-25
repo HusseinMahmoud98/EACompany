@@ -3,7 +3,7 @@ using Company.BLL.Profiles;
 using Company.BLL.Services.Classes.Auth;
 using Company.BLL.Services.Classes.Employees;
 using Company.BLL.Services.Interfaces.Employees;
-using Company.BLL.Services.Interfaces.IAuth;
+using Company.BLL.Services.Interfaces.Auth;
 using Company.DAL.Data.Contexts;
 using Company.DAL.Data.Repositories.Classes;
 using Company.DAL.Data.Repositories.Interfaces;
@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Text;
+using Company.BLL.Services.Classes.HelperServices;
+using Company.BLL.Services.Interfaces.HelperServices;
 
 namespace Company.Web
 {
@@ -120,7 +122,7 @@ namespace Company.Web
 
             builder.Services.AddScoped<IAuthManager, AuthManager>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
-           
+            builder.Services.AddScoped<IHelperServices, HelperServices>();
 
             //builder.Services.AddScoped<DepartmentResolver>();
 

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Company.BLL.Services.Interfaces.IAuth;
+using Company.BLL.Services.Interfaces.Auth;
 using Company.DAL.Entities;
 using Company.Shared;
 using Company.Shared.Dtos.Auth;

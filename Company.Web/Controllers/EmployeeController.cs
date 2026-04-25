@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Company.BLL.Services.Classes.Employees;
 using Company.BLL.Services.Interfaces.Employees;
+using Company.BLL.Services.Interfaces.HelperServices;
 using Company.BLL.Services.Interfaces.Specification;
 using Company.DAL.Entities;
 using Company.Shared.Dtos.Employees;
@@ -12,7 +14,9 @@ namespace Company.Web.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class EmployeeController(IEmployeeManager _employeeManager, IMapper _mapper) : ControllerBase
+    public class EmployeeController
+        (IEmployeeManager _employeeManager, IMapper _mapper, IHelperServices _helperServices) 
+        : ControllerBase
     {
         [HttpPost("Add")]
         public IActionResult Add(CreateEmployeeDto createEmployeeDto)
@@ -42,7 +46,38 @@ namespace Company.Web.Controllers
             return Ok(detailsEmployeeDto);
         }
 
-      
+        [HttpGet("ExportCsv")]
+        public IActionResult ExportCsv([FromQuery] EmployeeSpecsParams employeeSpecsParams)
+        {
+            //var spec = new EmployeeSpecsParams(employeeSpecsParams);
+            var employees = _employeeManager.GetAll(employeeSpecsParams);
+
+            var csvBytes = _helperServices.ExportEmployeesToCsv(employees);
+
+            return File(csvBytes, "text/csv", "EmployeesReport.csv");
+        }
+
+        [HttpPost("ImportCsv")]
+        public IActionResult ImportCsv(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            using var stream = file.OpenReadStream();
+            var employees = _helperServices.ImportEmployeesFromCsv(stream);
+            int count = 0;
+
+            // Optionally save to DB via manager/repository
+            foreach (var emp in employees)
+            {
+                _employeeManager.Add(emp);
+                count++;
+            }
+
+            return Ok(new { Count = count, Message = "Employees imported successfully" });
+        }
+
+
 
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Company.BLL.Services.Interfaces.IAuth
+namespace Company.BLL.Services.Interfaces.Auth
 {
     public interface IAuthManager
     {

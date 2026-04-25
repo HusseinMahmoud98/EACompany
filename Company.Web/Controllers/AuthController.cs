@@ -1,4 +1,4 @@
-﻿using Company.BLL.Services.Interfaces.IAuth;
+﻿using Company.BLL.Services.Interfaces.Auth;
 using Company.Shared.Dtos.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
